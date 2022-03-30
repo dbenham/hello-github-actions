@@ -1,19 +1,19 @@
-name: A workflow for my Hello World file
+name: A test workflow
 on: push
 jobs:
-  build:
-    name: Hello world action
+  get-config:
+    name: Prepare for deployment
     runs-on: ubuntu-latest
+
+    outputs:
+      argocd_app_name:  ${{ steps.argocd_setup.outputs.argocd_app_name }}
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: ./action-a
-        with:
-          MY_NAME: "Dave"
-  build2:
-    name: Hello world action2
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: ./action-a
-        with:
-          MY_NAME: "Dave 2"
+      - name: argocd_steup
+        id: argocd_steup
+        shell: bash
+        run: |
+          echo ::set-output name=argocd_app_name::core-services-pr${{ github.event.pull_request.number }}
+    
+
+
