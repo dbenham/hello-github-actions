@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: argocd_steup
         id: argocd_steup
+      - uses: hmarr/debug-action@v2
         shell: bash
         run: |
           echo ::set-output name=argocd_app_name::core-services-pr${{ github.event.pull_request.number }}
