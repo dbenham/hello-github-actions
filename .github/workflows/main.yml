@@ -1,7 +1,7 @@
 name: A test workflow
 on: push
 jobs:
-  get-config:
+  setup-config:
     name: Prepare for deployment
     runs-on: ubuntu-latest
 
@@ -9,7 +9,8 @@ jobs:
       argocd_app_name:  ${{ steps.argocd_setup.outputs.argocd_app_name }}
 
     env:
-      Greeting: drb-test-421
+      GREETING: drb-test-421
+
 
     steps:
       - name: argocd steup
@@ -19,6 +20,13 @@ jobs:
           echo ::set-output name=argocd_app_name::core-services-pr${{ github.event.pull_request.number }}
       - uses: hmarr/debug-action@v2
 
-    
+  deploy-pr:
+    env:
+      ARGOCD_APP_NAME: ${{ needs.setup-config.outputs.argocd_app_name }}
+    runs-on: ubuntu-latest
+    name: PR Deployment
+    needs: [setup-config]
+    steps:
+      - uses: hmarr/debug-action@v2    
 
 
