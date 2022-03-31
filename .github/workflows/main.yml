@@ -1,13 +1,13 @@
 name: A test workflow
 on: push
 jobs:
+
   setup-config:
-    name: Prepare for deployment
+    name: setup config
     runs-on: ubuntu-latest
 
     outputs:
-      argocd_app_name:  ${{ steps.argocd_setup.outputs.argocd_app_name }}
-
+      argocd_app_name: ${{ steps.argocd_setup.outputs.argocd_app_name }}
     env:
       GREETING: drb-test-434
     steps:
@@ -15,16 +15,17 @@ jobs:
         id: argocd_steup
         shell: bash
         run: |
-          echo ::set-output name=argocd_app_name::core-services-pr${{ github.event.pull_request.number }}
-      - uses: hmarr/debug-action@v2
+          echo ::set-output name=argocd_app_name::pr${{ github.event.pull_request.number }}
 
-  deploy-pr:
-    env:
-      ARGOCD_APP_NAME: ${{ needs.setup-config.outputs.argocd_app_name }}
-    runs-on: ubuntu-latest
-    name: PR Deployment
+  debug:
+    name: debug
     needs: [setup-config]
+    runs-on: ubuntu-latest
     steps:
-      - uses: hmarr/debug-action@v2    
-
+    - name: Clean up ArgoCD deployments
+      env:
+        ARGOCD_APP_NAME: ${{ needs.setup-config.outputs.argocd_app_name }}
+      run: |
+        echo "ARGOCD_APP_NAME: $ARGOCD_APP_NAME"
+      shell: bash
 
