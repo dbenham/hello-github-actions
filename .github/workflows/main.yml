@@ -15,7 +15,7 @@ jobs:
         id: argocd_setup
         shell: bash
         run: |
-          echo ::set-output name=argocd_app_name::pr${{ github.event.push_id }}
+          echo ::set-output name=argocd_app_name::pr${{ github.event.id }}
 
   debug:
     name: debug
