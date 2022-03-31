@@ -9,9 +9,7 @@ jobs:
       argocd_app_name:  ${{ steps.argocd_setup.outputs.argocd_app_name }}
 
     env:
-      GREETING: drb-test-421
-
-
+      GREETING: drb-test-434
     steps:
       - name: argocd steup
         id: argocd_steup
